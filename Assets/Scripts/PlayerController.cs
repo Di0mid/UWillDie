@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(CharacterController),  typeof(PlayerInput))]
+[RequireComponent(typeof(CharacterController),  typeof(PlayerInputProvider))]
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 5f;
@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     
     
     private CharacterController _characterController;
-    private PlayerInput _playerInput;
+    private PlayerInputProvider _playerInputProvider;
     private Plane _plane;
     private Camera _camera;
 
@@ -17,12 +17,10 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         _plane = new  Plane(Vector3.up, Vector3.zero);
-    }
-    
-    private void Start()
-    {
+        
         _characterController = GetComponent<CharacterController>();
-        _playerInput = GetComponent<PlayerInput>();
+        _playerInputProvider = GetComponent<PlayerInputProvider>();
+        
         _camera = Camera.main;
     }
 
@@ -36,30 +34,29 @@ public class PlayerController : MonoBehaviour
     
     private void HandleMovement()
     {
-        var input = _playerInput.GetMoveInput();
+        var input = _playerInputProvider.MoveInput;
         if (input == Vector2.zero)
         {
             return;
         }
         
         var direction = new Vector3(input.x, 0, input.y);
-        var motion = direction * (moveSpeed * Time.deltaTime);
         
-        _characterController.Move(motion);
+        _characterController.Move(direction * (moveSpeed * Time.deltaTime));
     }
 
     private void HandleRotation()
     {
-        var input = _playerInput.GetLookInput();
+        var mousePosition = _playerInputProvider.LookInput;
         
-        var ray = _camera.ScreenPointToRay(input);
+        var ray = _camera.ScreenPointToRay(mousePosition);
 
         if (!_plane.Raycast(ray, out float distance)) 
             return;
         
-        var point = ray.GetPoint(distance);
+        var worldMousePosition = ray.GetPoint(distance);
             
-        var direction = point - transform.position;
+        var direction = worldMousePosition - transform.position;
         direction.y = 0;
             
         transform.rotation = Quaternion.LookRotation(direction);

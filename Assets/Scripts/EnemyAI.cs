@@ -54,7 +54,7 @@ public class EnemyAI : MonoBehaviour
     {
         if (_currentState == State.Attacking)
         {
-            LootAtTarget();
+            LookAtTarget();
         }
     }
 
@@ -178,7 +178,7 @@ public class EnemyAI : MonoBehaviour
 
     
     
-    private void LootAtTarget()
+    private void LookAtTarget()
     {
         var direction = _targetTransform.position - transform.position;
         direction.y = 0;

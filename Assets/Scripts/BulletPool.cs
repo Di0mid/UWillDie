@@ -40,9 +40,10 @@ public class BulletPool : MonoBehaviour
 
 
     
-    public Bullet Get()
+    public Bullet Get(Vector3 position, Quaternion rotation)
     {
         var bullet = _pool.Get();
+        bullet.transform.SetPositionAndRotation(position, rotation);
         bullet.Init(_pool);
         
         return bullet;

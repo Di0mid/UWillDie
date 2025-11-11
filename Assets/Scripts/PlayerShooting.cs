@@ -1,7 +1,6 @@
 using UnityEngine;
-using UnityEngine.Pool;
 
-[RequireComponent(typeof(PlayerInput))]
+[RequireComponent(typeof(PlayerInputProvider))]
 public class PlayerShooting : MonoBehaviour
 {
     [SerializeField] private float fireForce = 20f;
@@ -12,14 +11,14 @@ public class PlayerShooting : MonoBehaviour
     
     private float _lastFireTime = float.MinValue;
 
-    private PlayerInput _input;
+    private PlayerInputProvider _input;
     private BulletPool _bulletPool;
     
 
     
     private void Awake()
     {
-        _input = GetComponent<PlayerInput>();
+        _input = GetComponent<PlayerInputProvider>();
         _bulletPool = GetComponent<BulletPool>();
     }
 
@@ -42,9 +41,7 @@ public class PlayerShooting : MonoBehaviour
         
         _lastFireTime = Time.time;
 
-        var bullet = _bulletPool.Get();
-        
-        bullet.transform.SetPositionAndRotation(firePoint.position, firePoint.rotation);
+        var bullet = _bulletPool.Get(firePoint.position, firePoint.rotation);
         bullet.Fire(firePoint.forward, fireForce);
     }
 }
