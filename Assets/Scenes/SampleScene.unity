@@ -549,7 +549,7 @@ GameObject:
   - component: {fileID: 830914691}
   - component: {fileID: 830914690}
   m_Layer: 0
-  m_Name: Enemy Wave Manager
+  m_Name: Wave Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -599,6 +599,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45ff1378836d3db4fa4b9f822b682d45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyRosterSO: {fileID: 11400000, guid: 8cee2e784e2e56d418d5d3f473aefcfb, type: 2}
+  defaultWaveBudget: 1
+  enemySpawnInterval: 2
+  waveInterval: 10
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0

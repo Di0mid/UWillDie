@@ -10,6 +10,7 @@ public class Bullet : MonoBehaviour
 
     
     private float _lifeTimer;
+    private bool _releasedToPool;
     
     private IObjectPool<Bullet> _pool;
     private Rigidbody _rigidbody;
@@ -46,6 +47,7 @@ public class Bullet : MonoBehaviour
     {
         _pool = pool;
         _lifeTimer = lifetime;
+        _releasedToPool = false;
     }
 
     public void Fire(Vector3 direction, float force)
@@ -56,6 +58,12 @@ public class Bullet : MonoBehaviour
     
     private void ReleaseToPool()
     {
+        if (_releasedToPool)
+        {
+            return;
+        }
+        
+        _releasedToPool = true;
         _pool?.Release(this);        
     }
 }

@@ -43,9 +43,10 @@ public class EnemyPool : MonoBehaviour
 
     
     
-    public EnemyAI Get()
+    public EnemyAI Get(Vector3 position)
     {
         var enemy = _pool.Get();
+        enemy.transform.position = position;
         
         enemy.Init(_pool, playerTransform);
         

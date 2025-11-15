@@ -60,12 +60,12 @@ public class EnemyAI : MonoBehaviour
 
     private void OnEnable()
     {
-        _health.OnDeath += ResetToPool;
+        _health.OnDeath += ReturnToPool;
     }
 
     private void OnDisable()
     {
-        _health.OnDeath -= ResetToPool;
+        _health.OnDeath -= ReturnToPool;
     }
     
     
@@ -81,10 +81,10 @@ public class EnemyAI : MonoBehaviour
         _navMeshAgent.isStopped = false;
         _currentState = State.Chasing;
         
-        if (_targetTransform.TryGetComponent(out Health health))
+        if (_targetTransform.TryGetComponent(out Health targetHealth))
         {
-            health.OnDeath -= Target_OnDeath;
-            health.OnDeath += Target_OnDeath;
+            targetHealth.OnDeath -= Target_OnDeath;
+            targetHealth.OnDeath += Target_OnDeath;
         }
         
         StartCoroutine(AILogic());
@@ -100,14 +100,16 @@ public class EnemyAI : MonoBehaviour
 
 
 
-    private void ResetToPool()
+    private void ReturnToPool()
     {
         StopAllCoroutines();
         
-        if (_targetTransform && _targetTransform.TryGetComponent(out Health health))
+        if (_targetTransform && _targetTransform.TryGetComponent(out Health targetHealth))
         {
-            health.OnDeath -= Target_OnDeath;
+            targetHealth.OnDeath -= Target_OnDeath;
         }   
+        
+        GameEvents.ReportEnemyDied();
         
         _myPool?.Release(this);
     }
